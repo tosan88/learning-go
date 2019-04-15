@@ -1,8 +1,7 @@
 package main
 
 import (
-	"fmt"
-	"github.com/johnnadratowski/golang-neo4j-bolt-driver/log"
+	"log"
 	"os"
 )
 
@@ -33,8 +32,8 @@ func main() {
 	name := os.Args[1]
 	p, found := findPerson(persons, name)
 	if found {
-		fmt.Printf("%s is in my list of persons. The age of this person is: %d", name, p.age)
+		log.Printf("%s is in my list of persons. The age of this person is: %d", name, p.age)
 	} else {
-		fmt.Printf("%s is NOT in my list of persons.", name)
+		log.Printf("%s is NOT in my list of persons.", name)
 	}
 }
