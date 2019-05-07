@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"time"
 )
 
 type person struct {
@@ -16,17 +15,23 @@ func main() {
 		{fullName: "Pete Ace"},
 		{fullName: "Anne Caty", likesCats: true},
 	}
-	for _, p := range persons {
-		go PrintPerson(p)
+
+	ch := make(chan string)
+	go StreamPersonInfo(persons, ch)
+	for msg := range ch {
+		fmt.Println(msg)
 	}
-	<-time.After(1 * time.Second)
 }
 
-//PrintPerson prints information about the given person p
-func PrintPerson(p person) {
-	if p.likesCats {
-		fmt.Printf("%s likes cats :)\n", p.fullName)
-	} else {
-		fmt.Printf("%s does not like cats :(\n", p.fullName)
+func StreamPersonInfo(persons []person, ch chan string) {
+	for _, p := range persons {
+		var info string
+		if p.likesCats {
+			info = fmt.Sprintf("%s likes cats :)", p.fullName)
+		} else {
+			info = fmt.Sprintf("%s does not like cats :(", p.fullName)
+		}
+		ch <- info
 	}
+	close(ch)
 }
